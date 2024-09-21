@@ -3,6 +3,7 @@ import conectarDB from "./config/db.js";
 import dotenv from "dotenv";
 import veterinarioRouters from './routes/veterinarioRoutes.js';
 import pacienteRouters from './routes/pacienteRoutes.js';
+import cors from 'cors';
 
 // app contendra todas las funcionalidades para crear el servidor
 const app = express();
@@ -13,6 +14,23 @@ dotenv.config();
 
 // conectar la DB
 conectarDB();
+
+const dominiosPermitidos = ["http://localhost:5175"];
+
+const corsOptions = {
+    origin: function(origin, collback) {
+        // si este origen, esta dentro de dominios permitidos
+        if (dominiosPermitidos.indexOf(origin) !== -1) {
+            // El origen del request es permitido
+            collback(null, true);
+        } else {
+            collback(new Error('No permitido por CORS'));
+        }
+    }
+}
+
+// Usar CORS
+app.use(cors(corsOptions));
 
 // cuando visitemos la URL, va a mandar a llamar veterinarioRouters
 app.use('/api/veterinarios', veterinarioRouters);
