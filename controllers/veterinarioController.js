@@ -27,7 +27,7 @@ const registrar = async (req, res) => {
         });
         res.json({msg: 'Registro nuevo correctamente ...'});
     } catch (error) {
-        console.log(`Error: ${error}`);
+        return res.status(500).json({msg: error.message});
     }
 }
 

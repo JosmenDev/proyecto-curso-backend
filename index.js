@@ -15,7 +15,7 @@ dotenv.config();
 // conectar la DB
 conectarDB();
 
-const dominiosPermitidos = ["http://localhost:5174"];
+const dominiosPermitidos = [process.env.FRONTEND_URL];
 
 const corsOptions = {
     origin: function(origin, collback) {
