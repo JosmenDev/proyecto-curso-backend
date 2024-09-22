@@ -2,6 +2,7 @@ import Veterinario from "../models/Veterinario.js";
 import generarJWT from "../helpers/generarJWT.js";
 import generarId from "../helpers/generarId.js";
 import emailRegistro from "../helpers/emailRegistro.js";
+import emailOlvidePassword from "../helpers/emailOlvidePassword.js";
 
 const registrar = async (req, res) => {
     // Leer datos del formulario: req.body
@@ -34,7 +35,7 @@ const registrar = async (req, res) => {
 const perfil = (req, res) => {
     // console.log(req.veterinario);
     const { veterinario } = req;
-    res.json( { perfil: veterinario });
+    res.json( veterinario);
 }
 
 const confirmar = async (req, res) => {
@@ -110,6 +111,12 @@ const olvidePassword = async (req, res) => {
         // se le genera token y se guarda en la db en el registro que se selecciono
         existeVeterinario.token = generarId();
         await existeVeterinario.save();
+        // Enviar Email con instrucciones
+        emailOlvidePassword( {
+            email,
+            nombre: existeVeterinario.nombre,
+            token: existeVeterinario.token
+        })
         res.json({msg: "Hemos enviado un email con las instrucciones"});
     } catch (error) {
         console.log(error);
